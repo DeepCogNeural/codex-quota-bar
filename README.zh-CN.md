@@ -1,5 +1,8 @@
 # Codex Quota Bar
 
+> **原生集成：** 两条无文字额度进度条、高级套餐优先排序，以及新对话手动账号选择。构建方式与实际验收状态见[集成说明](integrations/README.md)。v0.1.0 插件下载仍只读。
+
+
 **在 Mac 菜单栏中，同时查看 router 里的多个 Codex 账号额度。**
 
 [English](README.md) · [安装](#安装) · [架构](docs/architecture.md) · [验收记录](docs/validation.md)

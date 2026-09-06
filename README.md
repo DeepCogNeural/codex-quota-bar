@@ -1,5 +1,8 @@
 # Codex Quota Bar
 
+> **Native integration:** two text-free quota bars, plan-priority ordering and a manual new-chat account selector are available as a local source integration. See [build and acceptance notes](integrations/README.md). The v0.1.0 plugin download remains read-only.
+
+
 **See the Codex accounts in your router, together in your Mac menu bar.**
 
 A small local [CodexBar](https://github.com/steipete/CodexBar) provider plugin for [Subrouter](https://github.com/manaflow-ai/subrouter). Display remaining subscription quota, reset estimates, account aliases and login status without importing your router's OAuth tokens into another tool.

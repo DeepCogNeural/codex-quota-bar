@@ -30,3 +30,9 @@ Aliases are optional plain local settings. The source file contains no personal 
 Upstream v0.56.7 excludes user plugins from WidgetKit snapshots. Enabling a plugin does not enable a widget. A future native integration would need to carry account identities and windows through the host snapshot and widget picker without replacing the built-in Codex provider or leaking account data across providers.
 
 Keep that future work separate from this small plugin release. Do not write directly into the upstream app-group widget cache as a workaround.
+
+## Optional native integration
+
+The `integrations/` sources add an opt-in view to the existing CodexBar status item. A GET/POST local control endpoint stores the new-chat default in Subrouter. A dedicated private token authorizes changes. Existing session assignments remain unchanged; sessions created in manual mode persist a strict account pin and reuse upstream forced routing. Returning the default to automatic does not remove those pins. The checkmark identifies the new-chat default, not the account of an arbitrary foreground conversation.
+
+The host retains its existing provider integrations and settings. Plan priority controls visual order only, never the automatic scheduler. See `integrations/README.md` for the source revisions, build constraints and acceptance status.
