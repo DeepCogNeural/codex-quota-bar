@@ -1,4 +1,4 @@
-# CodexBar Subrouter
+# Codex Quota Bar
 
 **See the Codex accounts in your router, together in your Mac menu bar.**
 
@@ -31,7 +31,7 @@ This repository does not install the router, enroll accounts, or change Codex ro
 
 ### Add the plugin
 
-1. Download `subrouter.js` from the [v0.1.0 release](https://github.com/DeepCogNeural/codexbar-subrouter/releases/tag/v0.1.0).
+1. Download `subrouter.js` from the [v0.1.0 release](https://github.com/DeepCogNeural/codex-quota-bar/releases/tag/v0.1.0).
 2. In CodexBar, open **Settings → Plugins → Install plugin**, then choose the downloaded file.
 3. Set **Router URL** to `http://127.0.0.1:31415`. Leave **Account aliases (JSON)** blank, or enter your own mapping, for example:
 
@@ -94,6 +94,6 @@ Next: clearer reset formatting and a native path for router-account widgets. The
 
 ## Support the project
 
-If this saves you time, consider [starring the repository](https://github.com/DeepCogNeural/codexbar-subrouter). Stars are optional. Bug reports with sanitized examples and tested compatibility reports are also welcome.
+If this saves you time, consider [starring the repository](https://github.com/DeepCogNeural/codex-quota-bar). Stars are optional. Bug reports with sanitized examples and tested compatibility reports are also welcome.
 
 MIT licensed. Independent of OpenAI, Anthropic, Google, CodexBar and Subrouter.

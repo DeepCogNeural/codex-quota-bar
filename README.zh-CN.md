@@ -1,4 +1,4 @@
-# CodexBar Subrouter
+# Codex Quota Bar
 
 **在 Mac 菜单栏中，同时查看 router 里的多个 Codex 账号额度。**
 
@@ -20,7 +20,7 @@
 
 前提：macOS 14+、CodexBar，以及已经登录账号并监听 `http://127.0.0.1:31415` 的 Subrouter。本次检查版本为 CodexBar 0.56.7 / Subrouter 0.1.130。插件不负责安装 router 或配置 Codex 请求路由。
 
-1. 从 [Release](https://github.com/DeepCogNeural/codexbar-subrouter/releases/tag/v0.1.0) 下载 `subrouter.js`。
+1. 从 [Release](https://github.com/DeepCogNeural/codex-quota-bar/releases/tag/v0.1.0) 下载 `subrouter.js`。
 2. 打开 CodexBar 的 **Settings → Plugins → Install plugin**，选择文件。
 3. **Router URL** 填 `http://127.0.0.1:31415`。别名可以留空，也可以填 `{"first@example.com":"个人","second@example.com":"工作"}`。
 4. 在授权界面确认 Auth / Secrets 都是 none，输入上述本地地址并批准。
@@ -48,4 +48,4 @@ CodexBar 提供界面及插件运行环境；Subrouter 提供账号、额度数�
 
 删除时使用 CodexBar 的 **Plugins → Delete…**。不会删除 router 账号或修改 Codex 配置。
 
-如果对你有帮助，欢迎自愿 [Star](https://github.com/DeepCogNeural/codexbar-subrouter)。也欢迎提交脱敏问题和兼容性结果。MIT 许可，独立项目。
+如果对你有帮助，欢迎自愿 [Star](https://github.com/DeepCogNeural/codex-quota-bar)。也欢迎提交脱敏问题和兼容性结果。MIT 许可，独立项目。

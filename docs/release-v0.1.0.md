@@ -1,4 +1,4 @@
-# CodexBar Subrouter v0.1.0 — experimental
+# Codex Quota Bar v0.1.0 — experimental
 
 View multiple Subrouter Codex accounts in an existing macOS menu bar app.
 
