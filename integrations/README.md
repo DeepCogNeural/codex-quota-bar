@@ -6,7 +6,7 @@ This opt-in source integration adds two text-free quota bars and a new-chat rout
 
 Two stacked 34-point tracks, 5 points tall, within a 44-point menu item. Gray translucent tracks and pale outlines remain visible at zero. Filled width indicates remaining capacity. Colors: below 20 red; 20..<50 yellow; 50..<80 green; 80...100 white. No icon text. The minimum remaining base quota window represents each account; missing or invalid data has no fill. The menu contains identity and explanatory text.
 
-Accounts sort by plan: Pro 20x, Pro, Plus, then unknown. Within the same plan, local `quotaBarAccountOrder` preferences and then email provide stable ordering. A manual selection adds a checkmark without moving rows. The server currently reports generic Pro for some subscriptions; the UI does not invent a 20x label. Account aliases and identifiers are not embedded in source.
+Accounts sort by plan: Pro 20x, Pro, Plus, then unknown. Within the same plan, local `quotaBarAccountOrder` preferences and then email provide stable ordering. A manual selection adds a checkmark without moving rows. Account selection and refresh use native AppKit menu items outside the hosted quota card; the earlier embedded SwiftUI dropdown did not reliably handle clicks. The server currently reports generic Pro for some subscriptions; the UI does not invent a 20x label. Account aliases and identifiers are not embedded in source.
 
 ## Control contract
 
@@ -57,3 +57,7 @@ The separate `b-nnett/codex-subscription-router` project patches a copy of the d
 ## Local app packaging
 
 Preserve the original CodexBar app before replacement. A local build needs its SwiftPM resource bundles in `Contents/Resources`, the matching Sparkle framework in `Contents/Frameworks`, and the `@executable_path/../Frameworks` runtime search path. Sign and verify the complete local bundle after replacement. The acceptance build used ad-hoc signing for personal installation and retained the original helper/widget files; it is not a signed or notarized public distribution. Restoring the original app and setting `quotaBarEnabled` to false removes the native view without changing router accounts.
+
+### Native menu interaction correction
+
+The earlier deployment checked backend policy writes and visible menu text, but missed pointer interaction with the embedded SwiftUI Menu. That dropdown could not be activated. It has been replaced by ordinary AppKit menu actions. The replacement build and ad-hoc signature check passed. With explicit owner approval, accessibility clicks on each of the two account items and Automatic were followed by authenticated GET readback of the router policy; all three matched, and Automatic was left selected. The router was not restarted and no model request was sent for this check.

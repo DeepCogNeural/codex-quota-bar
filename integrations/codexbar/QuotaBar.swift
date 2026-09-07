@@ -196,21 +196,54 @@ struct QuotaBarControls: View {
             }
             Text(QuotaBar.text("Remaining quota · most constrained window", "剩余额度 · 取最紧张的窗口")).font(.caption2).foregroundStyle(.secondary)
             if let error = model.error { Text(error).font(.caption).foregroundStyle(.red) }
-            if let policy = model.policy {
-                Menu {
-                    Button(QuotaBar.text("Automatic", "自动")) { Task { await model.choose(nil) } }
-                    ForEach(model.ordered) { account in
-                        Button(model.name(account)) { Task { await model.choose(account.email) } }
-                    }
-                } label: {
-                    Text(policy.mode == "auto" ? QuotaBar.text("Automatic", "自动") : (model.aliases[policy.accountID ?? ""] ?? policy.accountID ?? "Manual"))
-                }.disabled(model.busy)
+            if model.policy != nil {
                 Text(QuotaBar.text("New chats only. Existing chats keep their account. Manual chats never fall back to another account.", "仅影响新对话。旧对话保留原账号；手动对话不会自动换账号。"))
                     .font(.caption2).foregroundStyle(.secondary)
             } else {
                 Text(QuotaBar.text("Manual control is unavailable", "手动控制暂不可用")).font(.caption).foregroundStyle(.secondary)
             }
-            Button(QuotaBar.text("Refresh", "刷新")) { Task { await model.refresh() } }.disabled(model.busy)
         }.padding(12).frame(width: width)
+    }
+}
+
+// AppKit owns selection events in NSMenu; keep actions out of the hosted SwiftUI card.
+@MainActor final class QuotaBarMenuActions: NSObject {
+    static let shared = QuotaBarMenuActions()
+
+    func append(to menu: NSMenu) {
+        let model = QuotaBar.shared
+        menu.addItem(.separator())
+        if let policy = model.policy {
+            let automatic = NSMenuItem(title: QuotaBar.text("Automatic", "自动"),
+                                       action: #selector(selectAccount(_:)), keyEquivalent: "")
+            automatic.target = self
+            automatic.state = policy.mode == "auto" ? .on : .off
+            menu.addItem(automatic)
+            for account in model.ordered {
+                let item = NSMenuItem(title: model.name(account),
+                                      action: #selector(selectAccount(_:)), keyEquivalent: "")
+                item.target = self
+                item.representedObject = account.email
+                item.state = policy.mode == "manual" && policy.accountID == account.email ? .on : .off
+                menu.addItem(item)
+            }
+        }
+        let refresh = NSMenuItem(title: QuotaBar.text("Refresh", "刷新"),
+                                 action: #selector(refreshQuota(_:)), keyEquivalent: "")
+        refresh.target = self
+        menu.addItem(refresh)
+    }
+
+    @objc private func selectAccount(_ sender: NSMenuItem) {
+        let accountID = sender.representedObject as? String
+        Task {
+            // A scheduled quota refresh must not silently discard a user's selection.
+            while QuotaBar.shared.busy { try? await Task.sleep(for: .milliseconds(50)) }
+            await QuotaBar.shared.choose(accountID)
+        }
+    }
+
+    @objc private func refreshQuota(_ sender: NSMenuItem) {
+        Task { await QuotaBar.shared.refresh() }
     }
 }

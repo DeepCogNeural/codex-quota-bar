@@ -66,7 +66,8 @@ changes = [
         if QuotaBar.shared.enabled {
             menu.addItem(self.makeMenuCardItem(
                 QuotaBarControls(width: width), id: "quotaBarControls", width: width,
-                containsInteractiveControls: true))
+                containsInteractiveControls: false))
+            QuotaBarMenuActions.shared.append(to: menu)
         }
 '''),
     (sr / 'proxy.go',
@@ -87,6 +88,12 @@ changes = [
 pending = {}
 for path, old, new in changes:
     text = pending.get(path, path.read_text())
+    if path.name == 'StatusItemController+UserPlugins.swift':
+        text = text.replace(
+            'QuotaBarControls(width: width), id: "quotaBarControls", width: width,\n                containsInteractiveControls: true))',
+            'QuotaBarControls(width: width), id: "quotaBarControls", width: width,\n                containsInteractiveControls: false))\n            QuotaBarMenuActions.shared.append(to: menu)')
+        if text != path.read_text():
+            pending[path] = text
     if new in text:
         continue
     if text.count(old) != 1:
