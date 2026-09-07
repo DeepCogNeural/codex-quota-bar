@@ -19,6 +19,17 @@
 - **明确区分额度与登录状态。** 未知数据不显示成 0；账号别名保存在本机。
 - **复用系统语言设置。** CodexBar 主界面可跟随 macOS；插件设置名及错误信息暂为英文。
 
+## 原生界面的设计亮点
+
+可选的[原生源码集成](integrations/README.md)采用简洁的 macOS 风格：系统字体、克制的留白、圆角额度条和随系统外观变化的浅灰轮廓。白色填充也能与浅色背景区分。轮廓改动目前已更新源码，尚待本机编译和视觉验收。
+
+- 菜单栏只保留两条无文字进度条，展开后再看账号和重置时间。
+- 高级套餐固定排在 Plus 上方，切换账号不打乱顺序。
+- Plus 默认显示 5h，点击额度行切换 Weekly，不新增按钮，并记住各账号的选择。交互验收范围见集成说明。
+- 原生账号选择器设置新对话默认账号；旧对话仍由 router 保持原分配。
+
+只想查看额度，安装下方 JavaScript 插件；需要进度条和手动选择，使用原生源码集成。两者不是同一个下载产物。
+
 ## 安装
 
 前提：macOS 14+、CodexBar，以及已经登录账号并监听 `http://127.0.0.1:31415` 的 Subrouter。本次检查版本为 CodexBar 0.56.7 / Subrouter 0.1.130。插件不负责安装 router 或配置 Codex 请求路由。
@@ -47,8 +58,10 @@ CodexBar 本身有 Claude / Antigravity 的接入及 Widget，但**本地插件�
 
 ## 与上游的区别
 
-CodexBar 提供界面及插件运行环境；Subrouter 提供账号、额度数据和路由；本仓库提供两者间的映射与安装说明。不包含上游应用二进制，也不是换名后的完整应用。Widget 为后续计划。
+CodexBar 提供界面及插件运行环境；Subrouter 提供账号、额度数据和路由；本仓库提供两者间的映射、可选原生额度界面、本地路由控制集成与安装说明。不包含上游应用二进制，也不是换名后的完整应用。Widget 为后续计划。
 
 删除时使用 CodexBar 的 **Plugins → Delete…**。不会删除 router 账号或修改 Codex 配置。
 
 如果对你有帮助，欢迎自愿 [Star](https://github.com/DeepCogNeural/codex-quota-bar)。也欢迎提交脱敏问题和兼容性结果。MIT 许可，独立项目。
+
+更多项目见 [DeepCogNeural 的 GitHub 主页](https://github.com/DeepCogNeural)。

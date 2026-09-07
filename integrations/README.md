@@ -71,3 +71,7 @@ Quota mode skips the upstream WidgetKit snapshot writer, shared-default resolver
 ### Quota window display update
 
 Source now defaults Plus to 5h and supports clicking quota rows to toggle Weekly with per-account persistence. This change only selects displayed data; it does not change routing or account pins. On 2026-09-07, the owner authorized a local release build and interaction check. The release build passed (109.97s), the updated app was installed, and its local signature verification passed. Accessibility actions switched the Plus row between 5h (62% remaining) and Weekly (85% remaining); the reset date changed with the selected window and percentages matched the local usage endpoint. The final Plus display was restored to 5h. Computer Use could not connect to the menu-only app, and scripted coordinate clicks did not establish pointer activation. Ordinary mouse-click and pixel-level progress-fill acceptance remain unverified. Earlier dropdown acceptance records apply to the previous native build.
+
+### Light-background track contrast
+
+Panel progress tracks now use a 0.75-point system separator outline over the fill, with hit testing disabled on the outline. This preserves white high-quota fills and the existing click target. Source updated; build, installation and light/dark visual acceptance for this change are pending.

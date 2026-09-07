@@ -217,6 +217,10 @@ struct QuotaBarControls: View {
                                     .frame(width: geometry.size.width * value / 100)
                             }
                         }
+                        .overlay {
+                            Capsule().strokeBorder(Color(nsColor: .separatorColor), lineWidth: 0.75)
+                                .allowsHitTesting(false)
+                        }
                     }.frame(height: 5)
                     if model.remaining(account) != nil, let seconds = model.window(account)?.ResetAfterSeconds,
                        seconds.isFinite, seconds >= 0, let fetched = model.fetchedAt {

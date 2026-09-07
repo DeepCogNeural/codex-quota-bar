@@ -23,6 +23,32 @@ If you already route Codex requests across multiple ChatGPT subscriptions, the a
 - **Readable identity.** Optional aliases stay in local CodexBar settings. Login status and missing quota are distinct states.
 - **Visible network access.** One loopback GET endpoint, approved through CodexBar's normal plugin flow.
 
+## Native macOS UI highlights
+
+The optional [native source integration](integrations/README.md) adds a compact, macOS-style quota panel: system typography, restrained spacing, rounded progress tracks and appearance-aware gray outlines that distinguish white quota fills from light backgrounds. The outline change is source-only pending local build and visual acceptance.
+
+- **Quiet at a glance:** two text-free menu-bar tracks; account names and reset details stay in the panel.
+- **Useful hierarchy:** higher subscription tiers stay above Plus; selecting an account does not reshuffle the list.
+- **5h first for Plus:** click the quota row to alternate 5h / Weekly without another button. Each account remembers its choice. See the interaction acceptance limits in the integration notes.
+- **Intentional control:** choose Automatic or a manual account for new chats; existing conversation assignments remain with the router.
+
+### Choose your installation
+
+| Need | Choose |
+| --- | --- |
+| Read multiple accounts with an existing CodexBar installation | [Released JavaScript plugin](#install) |
+| Native progress bars and manual new-chat account selection | [Source integration and build instructions](integrations/README.md) |
+
+### Common questions
+
+**Can I monitor multiple ChatGPT Plus / Pro subscriptions on macOS?** Yes, when those Codex accounts are enrolled in a compatible local Subrouter. This is a Codex subscription quota monitor, not a general ChatGPT message counter.
+
+**Is this a new router or a replacement for CodexBar?** Neither. It integrates both upstream projects and adds quota presentation plus optional local routing controls.
+
+**Does selecting an account move my current conversation?** No. The native selector changes the new-chat default. It does not identify or migrate the foreground conversation.
+
+**Does it manage Claude or Antigravity accounts?** Those remain separate CodexBar providers. This integration reads Codex accounts from Subrouter.
+
 ## Install
 
 ### Prerequisites
@@ -91,12 +117,12 @@ Use **Settings → Plugins → Delete…** for Subrouter. This removes the plugi
 
 ## Project scope and credits
 
-This is an independent integration, not a renamed CodexBar fork or a new routing engine. CodexBar supplies the menu, plugin runtime, language settings and refresh lifecycle. Subrouter supplies authentication, quota collection and routing. This repository supplies the response mapping and installation guidance. Neither upstream project's source or binary is bundled here.
+This is an independent integration, not a renamed CodexBar fork or a new routing engine. CodexBar supplies the menu, plugin runtime, language settings and refresh lifecycle. Subrouter supplies authentication, quota collection and routing. This repository supplies the response mapping, optional native quota UI, local routing-policy integration and installation guidance. Neither upstream project's source or binary is bundled here.
 
 Next: clearer reset formatting and a native path for router-account widgets. These are roadmap items, not shipped features. See [validation notes](docs/validation.md).
 
 ## Support the project
 
-If this saves you time, consider [starring the repository](https://github.com/DeepCogNeural/codex-quota-bar). Stars are optional. Bug reports with sanitized examples and tested compatibility reports are also welcome.
+If this saves you time, consider [starring the repository](https://github.com/DeepCogNeural/codex-quota-bar). Stars are optional. Explore more work by [DeepCogNeural](https://github.com/DeepCogNeural). Bug reports with sanitized examples and tested compatibility reports are also welcome.
 
 MIT licensed. Independent of OpenAI, Anthropic, Google, CodexBar and Subrouter.

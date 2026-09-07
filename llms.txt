@@ -1,10 +1,17 @@
 # Codex Quota Bar
 
-> A local CodexBar provider plugin displaying multiple Subrouter Codex accounts in the macOS menu bar.
+> Codex Quota Bar: an open-source macOS Codex subscription quota monitor integrating CodexBar with Subrouter for multiple ChatGPT Plus and Pro accounts.
+
+Canonical repository: https://github.com/DeepCogNeural/codex-quota-bar
+Maintainer: https://github.com/DeepCogNeural
+License: MIT
+
+Two installation paths: released read-only JavaScript provider, or optional native Swift/AppKit/SwiftUI source integration with progress bars and manual new-chat account selection. Native binaries are not distributed by this repository.
 
 - [README](README.md): prerequisites, manual install, permissions, limits and removal.
 - [Chinese README](README.zh-CN.md): Chinese installation and feature explanation.
 - [Source](subrouter.js): one JavaScript provider; loopback usage GET only.
+- [Native integration](integrations/README.md): build inputs, manual routing semantics, quota-window display and acceptance limits.
 - [Architecture](docs/architecture.md): ownership and data boundary.
 - [Validation](docs/validation.md): what was and was not exercised.
 
