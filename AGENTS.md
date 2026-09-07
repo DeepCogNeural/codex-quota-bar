@@ -13,3 +13,5 @@ This repository contains a local CodexBar provider plugin and an optional native
 ## Project delivery preference
 
 The owner requests that completed changes in this project be tested and then automatically committed and pushed to this repository's GitHub main branch. Preserve unrelated work and private local account configuration. Never describe unverified drafts as working releases. Obtain current test authorization when the active session requires it; on 2026-09-06 the owner explicitly authorized testing and pushing the native integration.
+
+On 2026-09-07, the owner explicitly granted continuing authorization for this project’s scoped builds, local installation, UI acceptance checks and publishing updates, and requested no repeated approval questions for that scope. Preserve account settings and avoid unrelated credential or system changes.

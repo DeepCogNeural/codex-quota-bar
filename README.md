@@ -25,7 +25,7 @@ If you already route Codex requests across multiple ChatGPT subscriptions, the a
 
 ## Native macOS UI highlights
 
-The optional [native source integration](integrations/README.md) adds a compact, macOS-style quota panel: system typography, restrained spacing, rounded progress tracks and appearance-aware gray outlines that distinguish white quota fills from light backgrounds. The outline change is source-only pending local build and visual acceptance.
+The optional [native source integration](integrations/README.md) adds a compact, macOS-style quota panel: system typography, restrained spacing, rounded progress tracks and appearance-aware gray outlines that distinguish white quota fills from light backgrounds. The outline change was built and installed locally; light/dark pixel-level acceptance is still pending because screenshot access was unavailable.
 
 - **Quiet at a glance:** two text-free menu-bar tracks; account names and reset details stay in the panel.
 - **Useful hierarchy:** higher subscription tiers stay above Plus; selecting an account does not reshuffle the list.

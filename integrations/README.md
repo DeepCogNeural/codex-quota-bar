@@ -74,4 +74,4 @@ Source now defaults Plus to 5h and supports clicking quota rows to toggle Weekly
 
 ### Light-background track contrast
 
-Panel progress tracks now use a 0.75-point system separator outline over the fill, with hit testing disabled on the outline. This preserves white high-quota fills and the existing click target. Source updated; build, installation and light/dark visual acceptance for this change are pending.
+Panel progress tracks now use a 0.75-point system separator outline over the fill, with hit testing disabled on the outline. This preserves white high-quota fills and the existing click target. Release build passed on 2026-09-07 (108.21s); the app was backed up, installed and its ad-hoc signature verified. Accessibility actions switched the Plus row from Weekly 85% to 5h 62% and back, including the corresponding reset estimates; its initial Weekly preference was restored. Computer Use connection timed out and Screen Recording access was unavailable. Ordinary pointer and light/dark pixel-level acceptance remain unverified. No router restart or model request was performed.
