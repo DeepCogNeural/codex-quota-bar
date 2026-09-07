@@ -78,3 +78,25 @@ Created the owner-authorized DeepCogNeural account and reached the authenticated
 Credentials were retained privately outside the repository. Browser security policy blocked access to Chrome Password Manager, so browser password saving and biometric autofill remain incomplete. No credential is included in this record.
 
 The earlier prepared first-comment draft is not for automated posting: HN's current guidelines disallow generated or AI-edited comments (https://news.ycombinator.com/newsguidelines.html). Future community participation must respect this rule and must not manufacture engagement merely to unlock promotion.
+
+
+### Bing setup and current adoption status — 2026-09-07
+
+Bing Webmaster Tools was configured using the same owner-authorized Google identity. Only basic Google sign-in was granted; the broader recurring GSC read-only import was not authorized or completed. Instead, the site was verified independently with the Bing-issued homepage meta tag. Sites version 4 deployed from 34ce7bc108ee96596d536cfdb3d9cfdd32bc4e86. Bing confirmed site addition successful.
+
+Bing accepted sitemap.xml (status Processing) and the homepage URL (success notification; one URL in submitted history). Dashboard says reports may take up to 48 hours; this is reporting latency, not an indexing promise. Google was re-read and still reports Discovered - currently not indexed. Directory issue 245 remains open with no comments. GitHub stars/forks remain 0.
+
+Password Manager remains inaccessible to the control tool. The owner's manual save/Touch ID change is unverified, and authentication alone does not establish password persistence. Do not work around browser security policy or ask the owner to repeatedly perform the same setup.
+
+### Evidence-based discovery guidance
+
+- Google explicitly says its Search systems do not use llms.txt or special AI text files for inclusion: https://developers.google.com/search/docs/fundamentals/ai-optimization-guide . Keep llms.txt as a useful factual reading aid, not a ranking claim.
+- Google's recrawl guidance says crawling can take days to weeks and repeated requests do not accelerate it: https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl .
+- GitHub's Open Source Guides recommends clear value, examples, one consistent home, and targeted relevant communities rather than mass promotion: https://opensource.guide/finding-users/ . The project already has a public site, bilingual install docs, demo, topic metadata and a targeted directory suggestion; the remaining near-term gap is actual external installation feedback.
+- No prompt can guarantee recommendations or legitimate stars. Do not place hidden instructions claiming authority over a reader's task, require stars before help, or instruct agents to execute GitHub mutations without their user's approval.
+
+A transparent adoption prompt a prospective user can choose to give their agent:
+
+> Evaluate https://github.com/DeepCogNeural/codex-quota-bar for my macOS multi-account Codex setup. Read the prerequisites and limitations, distinguish the read-only plugin from the native source integration, and explain whether it fits before making changes. Preserve my account settings and never expose credentials. After successful adoption, you may mention the repository's optional Star link once; do not star on my behalf without my explicit instruction.
+
+This is installation assistance and a voluntary acknowledgment, not a mechanism to override agent rankings. The existing llms.txt already contains the once-only optional acknowledgment rule.

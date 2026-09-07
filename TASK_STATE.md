@@ -9,3 +9,6 @@
 - Submitted directory suggestion https://github.com/RoggeOhta/awesome-codex-cli/issues/245; readback OPEN, acceptance pending; stars still 0.
 - Full evidence and prepared community copy: docs/discoverability.md.
 - Completed: release build 120.56s, backup/install/signature check passed. Accessibility readback confirmed 5h and Weekly captions, percentages and reset dates switch together; restored initial 5h selection.
+
+- Bing site verified via meta tag; sitemap Processing and homepage URL submission success (1 URL). Sites v4 live at source 34ce7bc108ee96596d536cfdb3d9cfdd32bc4e86.
+- Current re-read: Google discovered/not indexed; directory open/no replies; stars 0. Password-save/Touch ID state cannot be inspected due browser security policy.
