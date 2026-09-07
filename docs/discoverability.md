@@ -60,3 +60,12 @@ Google's crawl/index requirements: https://developers.google.com/search/docs/ess
 2026-09-07: submitted https://github.com/RoggeOhta/awesome-codex-cli/issues/245 under the directory's explicit resource-suggestion workflow in CONTRIBUTING.md. The submission discloses maintainer affiliation, early-stage status, desktop focus, upstream dependencies and lack of a signed native binary. GitHub readback confirmed OPEN. This is a pending suggestion, not accepted inclusion. Star count at submission remained 0.
 
 The owner prefers to keep the existing X account private; public X distribution is deferred, and no privacy settings will be changed. Prioritize relevant directories and search ownership verification.
+
+
+### Google Search Console configured — 2026-09-07
+
+Used the owner's authorized existing Chrome login. Added the URL-prefix property for https://codex-quota-bar.sheyajane.chatgpt.site/ and deployed the Google-issued HTML meta verification tag as Sites version 3, source commit 81541d9a75f1d4607cf629165988b650161f6f28. Deployment succeeded; Search Console explicitly confirmed ownership verification via HTML tag.
+
+Submitted sitemap.xml: Search Console reported success, read on September 7, with 1 discovered page and 0 videos. URL Inspection reported “Discovered - currently not indexed”; no previous crawl data was available. The manual indexing request was rejected with “Quota exceeded” and an instruction to try tomorrow. Do not claim indexing requested successfully or bypass the quota with another account. Sitemap discovery remains valid independently of this rejected manual request.
+
+This supersedes earlier notes saying no Google property was configured. Google successfully accessed the ownership tag and sitemap; this does not prove every crawler can fetch every route or establish homepage indexing. HN still requires login in Chrome; X remains private.
