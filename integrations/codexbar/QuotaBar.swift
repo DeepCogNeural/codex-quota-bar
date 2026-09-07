@@ -197,6 +197,7 @@ struct QuotaBarControls: View {
             Text(QuotaBar.text("Remaining quota · most constrained window", "剩余额度 · 取最紧张的窗口")).font(.caption2).foregroundStyle(.secondary)
             if let error = model.error { Text(error).font(.caption).foregroundStyle(.red) }
             if model.policy != nil {
+                QuotaBarAccountPicker().frame(width: 180, height: 28)
                 Text(QuotaBar.text("New chats only. Existing chats keep their account. Manual chats never fall back to another account.", "仅影响新对话。旧对话保留原账号；手动对话不会自动换账号。"))
                     .font(.caption2).foregroundStyle(.secondary)
             } else {
@@ -211,31 +212,14 @@ struct QuotaBarControls: View {
     static let shared = QuotaBarMenuActions()
 
     func append(to menu: NSMenu) {
-        let model = QuotaBar.shared
         menu.addItem(.separator())
-        if let policy = model.policy {
-            let automatic = NSMenuItem(title: QuotaBar.text("Automatic", "自动"),
-                                       action: #selector(selectAccount(_:)), keyEquivalent: "")
-            automatic.target = self
-            automatic.state = policy.mode == "auto" ? .on : .off
-            menu.addItem(automatic)
-            for account in model.ordered {
-                let item = NSMenuItem(title: model.name(account),
-                                      action: #selector(selectAccount(_:)), keyEquivalent: "")
-                item.target = self
-                item.representedObject = account.email
-                item.state = policy.mode == "manual" && policy.accountID == account.email ? .on : .off
-                menu.addItem(item)
-            }
-        }
         let refresh = NSMenuItem(title: QuotaBar.text("Refresh", "刷新"),
                                  action: #selector(refreshQuota(_:)), keyEquivalent: "")
         refresh.target = self
         menu.addItem(refresh)
     }
 
-    @objc private func selectAccount(_ sender: NSMenuItem) {
-        let accountID = sender.representedObject as? String
+    func selectAccount(_ accountID: String?) {
         Task {
             // A scheduled quota refresh must not silently discard a user's selection.
             while QuotaBar.shared.busy { try? await Task.sleep(for: .milliseconds(50)) }
@@ -245,5 +229,113 @@ struct QuotaBarControls: View {
 
     @objc private func refreshQuota(_ sender: NSMenuItem) {
         Task { await QuotaBar.shared.refresh() }
+    }
+}
+
+// A real NSControl receives mouse events directly inside the hosted menu card.
+struct QuotaBarAccountPicker: NSViewRepresentable {
+    func makeCoordinator() -> Coordinator { Coordinator() }
+    func makeNSView(context: Context) -> NSPopUpButton {
+        let button = NSPopUpButton(frame: .zero, pullsDown: false)
+        button.controlSize = .regular
+        button.font = .systemFont(ofSize: NSFont.systemFontSize)
+        button.target = context.coordinator
+        button.action = #selector(Coordinator.changed(_:))
+        button.setAccessibilityLabel(QuotaBar.text("New chat account", "新对话账号"))
+        return button
+    }
+    func updateNSView(_ button: NSPopUpButton, context: Context) {
+        let model = QuotaBar.shared
+        button.removeAllItems()
+        button.addItem(withTitle: QuotaBar.text("Automatic", "自动"))
+        for account in model.ordered {
+            let item = NSMenuItem(title: model.name(account), action: nil, keyEquivalent: "")
+            item.representedObject = account.email
+            button.menu?.addItem(item)
+        }
+        let selected = model.policy?.mode == "manual" ? model.policy?.accountID : nil
+        let index = button.itemArray.firstIndex { ($0.representedObject as? String) == selected } ?? 0
+        button.selectItem(at: index)
+        button.isEnabled = model.policy != nil
+    }
+    @MainActor final class Coordinator: NSObject {
+        @objc func changed(_ sender: NSPopUpButton) {
+            QuotaBarMenuActions.shared.selectAccount(sender.selectedItem?.representedObject as? String)
+        }
+    }
+}
+
+// A native panel keeps account controls out of NSMenu's tracking loop.
+@MainActor final class QuotaBarPopover: NSObject {
+    static let shared = QuotaBarPopover()
+    private var panel: NSPanel?
+    private var settings: (() -> Void)?
+    private var outsideClick: Any?
+
+    func attach(to item: NSStatusItem, settings: @escaping () -> Void) {
+        self.settings = settings
+        item.menu = nil
+        item.button?.target = self
+        item.button?.action = #selector(toggle(_:))
+    }
+
+    @objc private func toggle(_ sender: NSStatusBarButton) {
+        if panel?.isVisible == true {
+            close()
+            return
+        }
+        guard let anchorWindow = sender.window else { return }
+        let anchor = anchorWindow.convertToScreen(sender.convert(sender.bounds, to: nil))
+        let controller = NSHostingController(rootView: QuotaBarPanel {
+            self.close()
+            self.settings?()
+        })
+        let window = NSPanel(contentRect: NSRect(x: 0, y: 0, width: 320, height: 360),
+                             styleMask: [.titled, .fullSizeContentView], backing: .buffered, defer: false)
+        window.title = "Codex Quota Bar"
+        window.titleVisibility = .hidden
+        window.titlebarAppearsTransparent = true
+        window.isReleasedWhenClosed = false
+        window.hidesOnDeactivate = false
+        window.level = .popUpMenu
+        window.collectionBehavior = [.transient, .moveToActiveSpace]
+        window.contentViewController = controller
+        window.setContentSize(NSSize(width: 320, height: 360))
+        let screen = anchorWindow.screen?.visibleFrame ?? anchor
+        let x = min(max(anchor.midX - 160, screen.minX), screen.maxX - 320)
+        window.setFrameOrigin(NSPoint(x: x, y: anchor.minY - window.frame.height - 4))
+        panel = window
+        NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(nil)
+        if outsideClick == nil {
+            outsideClick = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
+                self?.close()
+            }
+        }
+    }
+
+    private func close() {
+        panel?.orderOut(nil)
+        panel = nil
+        if let outsideClick { NSEvent.removeMonitor(outsideClick) }
+        outsideClick = nil
+    }
+}
+
+private struct QuotaBarPanel: View {
+    let settings: () -> Void
+    var body: some View {
+        VStack(spacing: 0) {
+            QuotaBarControls(width: 320)
+            Divider()
+            HStack {
+                Button(QuotaBar.text("Refresh", "刷新")) {
+                    Task { await QuotaBar.shared.refresh() }
+                }
+                Spacer()
+                Button(QuotaBar.text("Settings…", "设置…"), action: settings)
+                Button(QuotaBar.text("Quit", "退出")) { NSApp.terminate(nil) }
+            }.controlSize(.small).padding(12)
+        }.frame(width: 320)
     }
 }

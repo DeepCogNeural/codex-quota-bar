@@ -13,6 +13,25 @@ base = Path(__file__).resolve().parent
 cb = a.codexbar / 'Sources/CodexBar'
 sr = a.subrouter / 'internal/proxy'
 changes = [
+    (cb / 'StatusItemController.swift',
+     '    private func attachMenus() {\n',
+     '''    private func attachMenus() {
+        if QuotaBar.shared.enabled && self.store.enabledFirstPartyProvidersForDisplay().isEmpty {
+            QuotaBarPopover.shared.attach(to: self.statusItem, settings: { [weak self] in
+                self?.showSettingsGeneral()
+            })
+            return
+        }
+'''),
+    (cb / 'UsageStore+WidgetSnapshot.swift',
+     '    func persistWidgetSnapshot(reason: String) {\n',
+     '    func persistWidgetSnapshot(reason: String) {\n        guard !UserDefaults.standard.bool(forKey: "quotaBarEnabled") else { return }\n'),
+    (cb / 'SettingsStore.swift',
+     '    private static func scheduleAppGroupMigration() {\n',
+     '    private static func scheduleAppGroupMigration() {\n        guard !UserDefaults.standard.bool(forKey: "quotaBarEnabled") else { return }\n'),
+    (cb / 'SettingsStore.swift',
+     '        guard !self.isRunningTests else { return nil }\n        return resolve()',
+     '        guard !self.isRunningTests, !UserDefaults.standard.bool(forKey: "quotaBarEnabled") else { return nil }\n        return resolve()'),
     (cb / 'StatusItemController+Menu.swift',
      '        let enabledProviders = self.store.enabledFirstPartyProvidersForDisplay()\n        let includesOverview',
      '\n'.join([
@@ -66,7 +85,7 @@ changes = [
         if QuotaBar.shared.enabled {
             menu.addItem(self.makeMenuCardItem(
                 QuotaBarControls(width: width), id: "quotaBarControls", width: width,
-                containsInteractiveControls: false))
+                containsInteractiveControls: true))
             QuotaBarMenuActions.shared.append(to: menu)
         }
 '''),
@@ -89,9 +108,10 @@ pending = {}
 for path, old, new in changes:
     text = pending.get(path, path.read_text())
     if path.name == 'StatusItemController+UserPlugins.swift':
-        text = text.replace(
-            'QuotaBarControls(width: width), id: "quotaBarControls", width: width,\n                containsInteractiveControls: true))',
-            'QuotaBarControls(width: width), id: "quotaBarControls", width: width,\n                containsInteractiveControls: false))\n            QuotaBarMenuActions.shared.append(to: menu)')
+        legacy = 'QuotaBarControls(width: width), id: "quotaBarControls", width: width,\n                containsInteractiveControls: true))'
+        text = text.replace('QuotaBarControls(width: width), id: "quotaBarControls", width: width,\n                containsInteractiveControls: false))', legacy)
+        if 'QuotaBarMenuActions.shared.append(to: menu)' not in text:
+            text = text.replace(legacy, legacy + '\n            QuotaBarMenuActions.shared.append(to: menu)')
         if text != path.read_text():
             pending[path] = text
     if new in text:

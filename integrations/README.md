@@ -6,7 +6,7 @@ This opt-in source integration adds two text-free quota bars and a new-chat rout
 
 Two stacked 34-point tracks, 5 points tall, within a 44-point menu item. Gray translucent tracks and pale outlines remain visible at zero. Filled width indicates remaining capacity. Colors: below 20 red; 20..<50 yellow; 50..<80 green; 80...100 white. No icon text. The minimum remaining base quota window represents each account; missing or invalid data has no fill. The menu contains identity and explanatory text.
 
-Accounts sort by plan: Pro 20x, Pro, Plus, then unknown. Within the same plan, local `quotaBarAccountOrder` preferences and then email provide stable ordering. A manual selection adds a checkmark without moving rows. Account selection and refresh use native AppKit menu items outside the hosted quota card; the earlier embedded SwiftUI dropdown did not reliably handle clicks. The server currently reports generic Pro for some subscriptions; the UI does not invent a 20x label. Account aliases and identifiers are not embedded in source.
+Accounts sort by plan: Pro 20x, Pro, Plus, then unknown. Within the same plan, local `quotaBarAccountOrder` preferences and then email provide stable ordering. A manual selection adds a checkmark without moving rows. In quota-only mode, the status item opens a native macOS panel containing an NSPopUpButton account selector. This keeps interactive controls outside NSMenu tracking. Clicking elsewhere closes the panel. Existing provider menus remain available when other providers are enabled. The server currently reports generic Pro for some subscriptions; the UI does not invent a 20x label. Account aliases and identifiers are not embedded in source.
 
 ## Control contract
 
@@ -61,3 +61,9 @@ Preserve the original CodexBar app before replacement. A local build needs its S
 ### Native menu interaction correction
 
 The earlier deployment checked backend policy writes and visible menu text, but missed pointer interaction with the embedded SwiftUI Menu. That dropdown could not be activated. It has been replaced by ordinary AppKit menu actions. The replacement build and ad-hoc signature check passed. With explicit owner approval, accessibility clicks on each of the two account items and Automatic were followed by authenticated GET readback of the router policy; all three matched, and Automatic was left selected. The router was not restarted and no model request was sent for this check.
+
+### Dropdown button acceptance — 2026-09-06
+
+The account button is restored in a native panel anchored below the status item. The earlier hosted menu and NSPopover attempts did not pass interaction acceptance. The final release build and local bundle signature check passed. Computer Use clicked the dropdown and selected each of the two account choices and Automatic; authenticated router readback matched all three choices. Automatic was left selected. No model requests were sent and the router was not restarted.
+
+Quota mode skips the upstream WidgetKit snapshot writer, shared-default resolver and app-group migration. The local ad-hoc build previously triggered repeated App Data permission requests for the upstream widget snapshot after its signature changed. Router widgets remain unsupported; this change avoids that unused app-group path rather than requesting broader access. Future upstream versions and signed distributions require their own compatibility checks.
