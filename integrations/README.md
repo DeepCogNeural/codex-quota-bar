@@ -4,7 +4,7 @@ This opt-in source integration adds two text-free quota bars and a new-chat rout
 
 ## Display contract
 
-Two stacked 34-point tracks, 5 points tall, within a 44-point menu item. Gray translucent tracks and pale outlines remain visible at zero. Filled width indicates remaining capacity. Colors: below 20 red; 20..<50 yellow; 50..<80 green; 80...100 white. No icon text. The minimum remaining base quota window represents each account; missing or invalid data has no fill. The menu contains identity and explanatory text.
+Two stacked 34-point tracks, 5 points tall, within a 44-point menu item. Gray translucent tracks and pale outlines remain visible at zero. Filled width indicates remaining capacity. Colors: below 20 red; 20..<50 yellow; 50..<80 green; 80...100 white. No icon text. Plus defaults to its 5-hour base quota window. Click an account quota row (no extra button) to alternate between 5h and Weekly. The percentage, progress fill, reset estimate and corresponding menu-bar track follow the selected window. Each account remembers its display choice locally. Other plans initially use their most constrained base window. Missing or invalid data in the selected window is unavailable, never substituted with another window or zero. The menu contains identity and explanatory text.
 
 Accounts sort by plan: Pro 20x, Pro, Plus, then unknown. Within the same plan, local `quotaBarAccountOrder` preferences and then email provide stable ordering. A manual selection adds a checkmark without moving rows. In quota-only mode, the status item opens a native macOS panel containing an NSPopUpButton account selector. This keeps interactive controls outside NSMenu tracking. Clicking elsewhere closes the panel. Existing provider menus remain available when other providers are enabled. The server currently reports generic Pro for some subscriptions; the UI does not invent a 20x label. Account aliases and identifiers are not embedded in source.
 
@@ -14,7 +14,7 @@ Automatic or a manually selected account, for new Codex sessions only. Previousl
 
 The local GET/POST routing-policy handler requires a dedicated token, loopback peer, and no browser Origin. No new behavior is enabled unless both `SUBROUTER_ROUTING_POLICY_FILE` and `SUBROUTER_ROUTING_TOKEN_FILE` are configured. The token must contain at least 32 characters. Policy writes are atomic and preserve existing pins. A 10,000-session cap fails explicitly instead of discarding old pins. File failures must not silently turn manual mode into automatic mode.
 
-UI opt-in preferences: `quotaBarEnabled`, `quotaBarTokenFile`, `quotaBarAccountOrder`, `quotaBarAliases`. Preferences are local and are never included in this repository.
+UI opt-in preferences: `quotaBarEnabled`, `quotaBarTokenFile`, `quotaBarAccountOrder`, `quotaBarAliases`, `quotaBarDisplayWindows`. Preferences are local and are never included in this repository.
 
 ## Source application
 
@@ -67,3 +67,7 @@ The earlier deployment checked backend policy writes and visible menu text, but 
 The account button is restored in a native panel anchored below the status item. The earlier hosted menu and NSPopover attempts did not pass interaction acceptance. The final release build and local bundle signature check passed. Computer Use clicked the dropdown and selected each of the two account choices and Automatic; authenticated router readback matched all three choices. Automatic was left selected. No model requests were sent and the router was not restarted.
 
 Quota mode skips the upstream WidgetKit snapshot writer, shared-default resolver and app-group migration. The local ad-hoc build previously triggered repeated App Data permission requests for the upstream widget snapshot after its signature changed. Router widgets remain unsupported; this change avoids that unused app-group path rather than requesting broader access. Future upstream versions and signed distributions require their own compatibility checks.
+
+### Quota window display update
+
+Source now defaults Plus to 5h and supports clicking quota rows to toggle Weekly with per-account persistence. This change only selects displayed data; it does not change routing or account pins. Local build and pointer acceptance for this update are pending. Earlier acceptance records above apply to the previous native build.

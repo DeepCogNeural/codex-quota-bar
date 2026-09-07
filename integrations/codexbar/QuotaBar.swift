@@ -36,6 +36,36 @@ import Observation
             return limits.map { 100 - $0.UsedPercent }.min()
         }
     }
+    enum DisplayWindow: String {
+        case fiveHours, weekly
+        var seconds: Double { self == .fiveHours ? 18000 : 604800 }
+        @MainActor var title: String { self == .fiveHours ? "5h" : QuotaBar.text("Weekly", "每周") }
+    }
+    var displayedWindows: [String: String] = UserDefaults.standard.dictionary(forKey: "quotaBarDisplayWindows") as? [String: String] ?? [:]
+    func displayWindow(_ account: Account) -> DisplayWindow? {
+        if let raw = displayedWindows[account.id], let selected = DisplayWindow(rawValue: raw) { return selected }
+        if account.planRank == 100 { return .fiveHours }
+        switch account.limitingWindow?.LimitWindowSeconds {
+        case 18000: return .fiveHours
+        case 604800: return .weekly
+        default: return nil
+        }
+    }
+    func window(_ account: Account) -> Window? {
+        guard let selected = displayWindow(account) else { return account.limitingWindow }
+        return account.windows?.first { ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds == selected.seconds }
+    }
+    func remaining(_ account: Account) -> Double? {
+        guard account.auth_valid == true, account.auth_checked == true,
+              let value = window(account)?.UsedPercent,
+              value.isFinite, (0...100).contains(value) else { return nil }
+        return 100 - value
+    }
+    func toggleWindow(_ account: Account) {
+        displayedWindows[account.id] = (displayWindow(account) == .weekly ? DisplayWindow.fiveHours : .weekly).rawValue
+        UserDefaults.standard.set(displayedWindows, forKey: "quotaBarDisplayWindows")
+        onUpdate?()
+    }
     struct Policy: Codable { var mode: String; var accountID: String? }
     var accounts: [Account] = []
     var policy: Policy?
@@ -132,7 +162,7 @@ import Observation
         return .white
     }
     func image() -> NSImage {
-        let values = Array(ordered.prefix(2)).map(\.remaining)
+        let values = Array(ordered.prefix(2)).map { remaining($0) }
         let image = NSImage(size: NSSize(width: 36, height: 18), flipped: false) { rect in
             for i in 0..<2 {
                 let track = NSRect(x: 1, y: i == 0 ? 10 : 2, width: 34, height: 5)
@@ -176,25 +206,32 @@ struct QuotaBarControls: View {
                         if model.policy?.mode == "manual" && model.policy?.accountID == account.email {
                             Image(systemName: "checkmark.circle.fill").foregroundStyle(.tint)
                         }
-                        Text(account.remaining.map { String(format: "%.0f%%", $0) } ?? "—").monospacedDigit()
+                        Text(model.displayWindow(account)?.title ?? "").foregroundStyle(.secondary)
+                        Text(model.remaining(account).map { String(format: "%.0f%%", $0) } ?? "—").monospacedDigit()
                     }.font(.caption)
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             Capsule().fill(.quaternary)
-                            if let value = account.remaining {
+                            if let value = model.remaining(account) {
                                 Capsule().fill(Color(nsColor: QuotaBar.tint(value)))
                                     .frame(width: geometry.size.width * value / 100)
                             }
                         }
                     }.frame(height: 5)
-                    if account.remaining != nil, let seconds = account.limitingWindow?.ResetAfterSeconds,
+                    if model.remaining(account) != nil, let seconds = model.window(account)?.ResetAfterSeconds,
                        seconds.isFinite, seconds >= 0, let fetched = model.fetchedAt {
                         Text(QuotaBar.text("Resets ≈ ", "预计重置 ≈ ") + fetched.addingTimeInterval(seconds).formatted(date: .abbreviated, time: .shortened))
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }.padding(.vertical, 4)
+                    .contentShape(Rectangle())
+                    .onTapGesture { model.toggleWindow(account) }
+                    .accessibilityAction(named: Text(QuotaBar.text("Switch quota window", "切换额度窗口"))) {
+                        model.toggleWindow(account)
+                    }
+                    .help(QuotaBar.text("Click to switch between 5h and Weekly", "点击切换 5 小时与每周额度"))
             }
-            Text(QuotaBar.text("Remaining quota · most constrained window", "剩余额度 · 取最紧张的窗口")).font(.caption2).foregroundStyle(.secondary)
+            Text(QuotaBar.text("Remaining quota · click a row for 5h / Weekly", "剩余额度 · 点击账号切换 5 小时 / 每周")).font(.caption2).foregroundStyle(.secondary)
             if let error = model.error { Text(error).font(.caption).foregroundStyle(.red) }
             if model.policy != nil {
                 QuotaBarAccountPicker().frame(width: 180, height: 28)
