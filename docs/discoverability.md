@@ -69,3 +69,12 @@ Used the owner's authorized existing Chrome login. Added the URL-prefix property
 Submitted sitemap.xml: Search Console reported success, read on September 7, with 1 discovered page and 0 videos. URL Inspection reported “Discovered - currently not indexed”; no previous crawl data was available. The manual indexing request was rejected with “Quota exceeded” and an instruction to try tomorrow. Do not claim indexing requested successfully or bypass the quota with another account. Sitemap discovery remains valid independently of this rejected manual request.
 
 This supersedes earlier notes saying no Google property was configured. Google successfully accessed the ownership tag and sitemap; this does not prove every crawler can fetch every route or establish homepage indexing. HN still requires login in Chrome; X remains private.
+
+
+### HN account and submission outcome — 2026-09-07
+
+Created the owner-authorized DeepCogNeural account and reached the authenticated submission form. Submitted only the existing project name (with Show HN prefix) and repository URL, without generated comments. HN returned an explicit temporary Show HN restriction for new users; no published item was confirmed. Do not remove the prefix to evade the restriction or create another account.
+
+Credentials were retained privately outside the repository. Browser security policy blocked access to Chrome Password Manager, so browser password saving and biometric autofill remain incomplete. No credential is included in this record.
+
+The earlier prepared first-comment draft is not for automated posting: HN's current guidelines disallow generated or AI-edited comments (https://news.ycombinator.com/newsguidelines.html). Future community participation must respect this rule and must not manufacture engagement merely to unlock promotion.
