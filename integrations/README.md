@@ -75,3 +75,7 @@ Source now defaults Plus to 5h and supports clicking quota rows to toggle Weekly
 ### Light-background track contrast
 
 Panel progress tracks now use a 0.75-point system separator outline over the fill, with hit testing disabled on the outline. This preserves white high-quota fills and the existing click target. Release build passed on 2026-09-07 (108.21s); the app was backed up, installed and its ad-hoc signature verified. Accessibility actions switched the Plus row from Weekly 85% to 5h 62% and back, including the corresponding reset estimates; its initial Weekly preference was restored. Computer Use connection timed out and Screen Recording access was unavailable. Ordinary pointer and light/dark pixel-level acceptance remain unverified. No router restart or model request was performed.
+
+### Explicit reset-window captions
+
+Reset captions now include the selected window (for example, `5h resets` or `Weekly resets`). The date still comes from that same base window. The 5h label describes the quota window length, not a fresh five-hour countdown on click. Release build passed in 120.56s on 2026-09-07; local installation and signature verification passed. Accessibility readback toggled Plus from 5h (22%, September 7 at 21:55) to Weekly (78%, September 13 at 23:47), then restored 5h. Percentages are a point-in-time local observation, not fixed sample data. No router restart or model request was used for this check.

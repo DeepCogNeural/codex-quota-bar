@@ -224,7 +224,7 @@ struct QuotaBarControls: View {
                     }.frame(height: 5)
                     if model.remaining(account) != nil, let seconds = model.window(account)?.ResetAfterSeconds,
                        seconds.isFinite, seconds >= 0, let fetched = model.fetchedAt {
-                        Text(QuotaBar.text("Resets ≈ ", "预计重置 ≈ ") + fetched.addingTimeInterval(seconds).formatted(date: .abbreviated, time: .shortened))
+                        Text((model.displayWindow(account).map { $0.title + " " } ?? "") + QuotaBar.text("resets ≈ ", "预计重置 ≈ ") + fetched.addingTimeInterval(seconds).formatted(date: .abbreviated, time: .shortened))
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }.padding(.vertical, 4)
