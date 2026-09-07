@@ -1,6 +1,6 @@
 # Codex Quota Bar
 
-[Product website / 产品展示](https://codex-quota-bar.quick-trail-8960.chatgpt.site/) · [Maintainer / 作者](https://github.com/DeepCogNeural)
+[Product website / 产品展示](https://codex-quota-bar.sheyajane.chatgpt.site/) · [Maintainer / 作者](https://github.com/DeepCogNeural)
 
 > **Native integration:** two text-free quota bars, plan-priority ordering and a manual new-chat account selector are available as a local source integration. See [build and acceptance notes](integrations/README.md). The v0.1.0 plugin download remains read-only.
 
