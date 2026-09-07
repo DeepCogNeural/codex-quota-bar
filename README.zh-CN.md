@@ -1,5 +1,7 @@
 # Codex Quota Bar
 
+[Product website / 产品展示](https://codex-quota-bar.quick-trail-8960.chatgpt.site/) · [Maintainer / 作者](https://github.com/DeepCogNeural)
+
 > **原生集成：** 两条无文字额度进度条、高级套餐优先排序，以及新对话手动账号选择。构建方式与实际验收状态见[集成说明](integrations/README.md)。v0.1.0 插件下载仍只读。
 
 

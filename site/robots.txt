@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://codex-quota-bar.quick-trail-8960.chatgpt.site/sitemap.xml
