@@ -1,6 +1,6 @@
 # Native menu and manual routing integration
 
-This opt-in source integration adds two text-free quota bars and a new-chat routing selector to CodexBar. It is separate from the released JavaScript plugin. The native application is installed and its menu has been exercised locally. The router replacement is built but awaits permission to restart the active service.
+This opt-in source integration adds two text-free quota bars and a new-chat routing selector to CodexBar. It is separate from the released JavaScript plugin. The native application is installed and its menu has been exercised locally. The router replacement is activated locally; both account selections and returning to automatic mode were exercised through the authenticated control endpoint.
 
 ## Display contract
 
@@ -24,7 +24,7 @@ UI opt-in preferences: `quotaBarEnabled`, `quotaBarTokenFile`, `quotaBarAccountO
 
 The owner authorized compilation, local UI checks, simulated routing checks and publishing on 2026-09-06. The native CodexBar build is installed locally. Its two account rows and native settings menu were read back, including after opening the menu. The old RouterBar LaunchAgent was stopped and archived. Original app and router launch configuration were backed up. Automatic CodexBar updates are disabled for this local modified build to prevent overwrite.
 
-The live router has active proxy connections. Its replacement binary is prepared, but the service is unchanged pending permission for a potentially interrupting restart. The installed menu accurately shows manual control as unavailable until that backend is enabled. This is a source integration, not a fully accepted native binary release.
+The owner subsequently authorized the service restart. The replacement binary is active with both policy/token paths configured. Authenticated manual selection of each of the two local accounts was saved and independently read back, then the default was restored to automatic. The native menu now displays the new-chat/manual-session explanation instead of the unavailable message. This is a source integration, not a signed public native binary release.
 
 A backend rollout must add the two policy/token environment paths, preserve account and session state, restart the service, verify health/readiness and round-trip automatic/manual selection, then leave the default automatic. Keep the original launch configuration for rollback. No model request is necessary for these administrative checks.
 
@@ -52,7 +52,7 @@ The separate `b-nnett/codex-subscription-router` project patches a copy of the d
 - Standalone Swift display checks: passed. Pro precedes Plus; the most constrained base window is used; thresholds 19/20/49/50/79/80/100 match the requested colors; unknown quota stays unavailable; the 36×18 image renders.
 - CodexBar release build: passed after the documented CLT adaptations. Local ad-hoc signature verification passed.
 - Installed native menu: accessibility readback found the two real accounts, plan labels, remaining quota and local estimated reset dates; language followed macOS English. Screenshot-level acceptance is not claimed.
-- Live manual routing is not yet accepted: the old service has six active proxy connections, so a potentially interrupting restart was explicitly presented to the owner. No live model requests or actual quota-exhaustion failover were tested.
+- Live administrative control: both manual account selections passed POST/GET readback after the authorized restart; the final default is automatic. Native menu readback confirms that manual controls are available. No live model requests or actual quota-exhaustion failover were tested.
 
 ## Local app packaging
 
