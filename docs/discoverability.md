@@ -30,4 +30,26 @@ Compare the same query and locale over time: `Codex Quota Bar DeepCogNeural`, `S
 
 Codex Quota Bar connects CodexBar with Subrouter to show multiple Codex subscriptions in a compact macOS interface. Install the read-only JavaScript provider or build the optional native integration for progress bars and manual new-chat account selection. Existing conversations retain their router assignments. MIT licensed; no signed native binary is distributed.
 
-This description is ready for a relevant community post. No third-party community posts, unsolicited issues or promotional pull requests have been sent. Placement in third-party directories and communities is not an implemented feature and may require their maintainers' approval.
+This description is ready for a relevant community post. An X introduction was published on 2026-09-07; see the distribution ledger below. No unsolicited issues or promotional pull requests have been sent. Placement in third-party directories and communities is not an implemented feature and may require their maintainers' approval.
+
+
+## Distribution goal and ledger — 2026-09-07
+
+Goal: reach relevant users and earn at least one genuine voluntary GitHub star. A posted link, an impression, a visit, an installation and a star are distinct outcomes. Current observed star count: 0. No deadline or ranking guarantee is implied.
+
+- Published X introduction: https://x.com/RichardRich_11/status/2097104546644324658 . X confirmed publication and displayed the exact post. The account is protected, so this is follower-only distribution, not a public-search backlink. Do not change account privacy without explicit approval; it affects historical posts too.
+- Hacker News submission requires login. The approved channel is a Show HN linking directly to runnable source/install instructions, not merely the landing page. Follow https://news.ycombinator.com/showhn.html ; do not solicit votes.
+- CodexBar and Subrouter both have GitHub Discussions disabled. Do not use bug reports as advertising.
+- Google Search Console currently requires Google login. Next: establish a URL-prefix property for the public site, deploy its issued ownership verification, then submit sitemap and inspect the live URL. No ownership verification or indexing request has yet been completed there.
+
+Prepared Show HN title: **Show HN: Codex Quota Bar – Multiple Codex accounts in a macOS quota UI**
+
+Prepared first comment: I built this integration to make multiple Codex subscriptions easier to inspect on macOS. It connects CodexBar and Subrouter, with a read-only JavaScript provider and an optional native build for quota bars, 5-hour/weekly views and new-chat account selection. Existing conversations retain their routing assignments. It requires setup and has no signed native binary yet. I would especially appreciate feedback on installation friction and quota-window clarity. Credit to both upstream projects; the integration is MIT licensed.
+
+Sequence: public targeted launch → Google ownership/index inspection → fix any concrete crawl error → collect installation feedback → measure genuine stars. Do not repeat promotional posts merely because a star has not arrived.
+
+## Hosting explained
+
+The product site is publicly hosted on Sites at the URL above. It serves static HTML/CSS/JavaScript from `out/`; it is independent of the maintainer's Mac. This site is a presentation and installation entry point, not the local routing service. No model API key, account login database or router endpoint is configured in the site. Underlying physical server location and billing/usage limits have not been established; do not promise permanent free hosting. Extra servers and databases are unnecessary for the current presentation site.
+
+Google's crawl/index requirements: https://developers.google.com/search/docs/essentials/technical . An HTTP error from one client does not prove Googlebot is blocked. Search Console's live inspection is the next evidence source. `llms.txt` is a convenience for readers, not a priority-ranking contract.
