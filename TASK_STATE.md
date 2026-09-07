@@ -5,6 +5,7 @@
 - GitHub stars observed: 0. No fabricated engagement.
 - Sites live/public confirmed; static presentation only, local router remains on Mac.
 - Google Search Console and Hacker News need login in in-app browser. Neither submission completed. Upstream Discussions disabled; no promotional issues filed.
-- Next: obtain public X identity and Google/HN login, submit relevant public launch and Search Console verification, inspect actual crawl result, then measure responses/stars.
+- Owner keeps X private. Public X promotion deferred. Next: Google/HN login for search verification/community launch; await directory maintainer response.
+- Submitted directory suggestion https://github.com/RoggeOhta/awesome-codex-cli/issues/245; readback OPEN, acceptance pending; stars still 0.
 - Full evidence and prepared community copy: docs/discoverability.md.
 - Completed: release build 120.56s, backup/install/signature check passed. Accessibility readback confirmed 5h and Weekly captions, percentages and reset dates switch together; restored initial 5h selection.

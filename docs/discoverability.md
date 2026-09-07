@@ -53,3 +53,10 @@ Sequence: public targeted launch → Google ownership/index inspection → fix a
 The product site is publicly hosted on Sites at the URL above. It serves static HTML/CSS/JavaScript from `out/`; it is independent of the maintainer's Mac. This site is a presentation and installation entry point, not the local routing service. No model API key, account login database or router endpoint is configured in the site. Underlying physical server location and billing/usage limits have not been established; do not promise permanent free hosting. Extra servers and databases are unnecessary for the current presentation site.
 
 Google's crawl/index requirements: https://developers.google.com/search/docs/essentials/technical . An HTTP error from one client does not prove Googlebot is blocked. Search Console's live inspection is the next evidence source. `llms.txt` is a convenience for readers, not a priority-ranking contract.
+
+
+### Community directory submission
+
+2026-09-07: submitted https://github.com/RoggeOhta/awesome-codex-cli/issues/245 under the directory's explicit resource-suggestion workflow in CONTRIBUTING.md. The submission discloses maintainer affiliation, early-stage status, desktop focus, upstream dependencies and lack of a signed native binary. GitHub readback confirmed OPEN. This is a pending suggestion, not accepted inclusion. Star count at submission remained 0.
+
+The owner prefers to keep the existing X account private; public X distribution is deferred, and no privacy settings will be changed. Prioritize relevant directories and search ownership verification.
