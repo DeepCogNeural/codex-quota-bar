@@ -19,3 +19,9 @@
 - Usage endpoint confirmed EDU authentication and 100% remaining in both base windows at enrollment. Native menu selected the added account; backend manual policy matched.
 - Removed two-row truncation from expanded panel. Build/install/signature check passed; installed panel readback displayed all three accounts and the new selection. No model request was sent.
 - Earlier invalid_state was an expired/invalid authorization session; fresh uninterrupted browser flow succeeded. Exact cause of invalidation remains unknown.
+
+## Discovery update — 2026-09-13
+
+- Google and Bing homepage indexing both explicitly confirmed in their URL Inspection tools. Earlier pending-index notes are historical.
+- GitHub 0 stars/0 forks; 14-day traffic 4 views/2 uniques, may include owner. Directory suggestion #245 remains open without replies.
+- Bing meta description length issue: shortened description to 156 characters; deployment pending. Separate outreach task owns new community promotion.

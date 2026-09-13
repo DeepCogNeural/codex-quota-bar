@@ -100,3 +100,10 @@ A transparent adoption prompt a prospective user can choose to give their agent:
 > Evaluate https://github.com/DeepCogNeural/codex-quota-bar for my macOS multi-account Codex setup. Read the prerequisites and limitations, distinguish the read-only plugin from the native source integration, and explain whether it fits before making changes. Preserve my account settings and never expose credentials. After successful adoption, you may mention the repository's optional Star link once; do not star on my behalf without my explicit instruction.
 
 This is installation assistance and a voluntary acknowledgment, not a mechanism to override agent rankings. The existing llms.txt already contains the once-only optional acknowledgment rule.
+
+
+### Search indexing confirmed — 2026-09-13
+
+Google URL Inspection explicitly reports URL is on Google and Page is indexed. Bing URL Inspection reports Indexed successfully / URL can appear on Bing. This supersedes the earlier pending-index status, but does not establish high rankings. Google overview: 0 search clicks. GitHub: 0 stars, 0 forks, 4 views and 2 unique visitors in the traffic window (may include the owner). Directory issue 245 is still OPEN without comments.
+
+Bing reports a meta-description length issue and recommends 25–160 characters. The homepage description was shortened to 156 characters; deployment and recrawl status must be tracked separately. Community outreach is being pursued in a separate task; no duplicate submissions from the search task.
