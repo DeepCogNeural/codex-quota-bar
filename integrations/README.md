@@ -79,3 +79,7 @@ Panel progress tracks now use a 0.75-point system separator outline over the fil
 ### Explicit reset-window captions
 
 Reset captions now include the selected window (for example, `5h resets` or `Weekly resets`). The date still comes from that same base window. The 5h label describes the quota window length, not a fresh five-hour countdown on click. Release build passed in 120.56s on 2026-09-07; local installation and signature verification passed. Accessibility readback toggled Plus from 5h (22%, September 7 at 21:55) to Weekly (78%, September 13 at 23:47), then restored 5h. Percentages are a point-in-time local observation, not fixed sample data. No router restart or model request was used for this check.
+
+### More than two accounts
+
+The expanded quota panel now lists every enrolled account instead of truncating at two. The compact status item retains two tracks. A third EDU account was enrolled through isolated browser SSO; local usage readback reported valid authentication and both base windows. The native selector and routing-policy readback selected the added account. Release build passed in 113.37s, installation/signature verification passed, and the installed panel exposed all three rows. This administrative acceptance does not claim a model request or billing test. Browser login must not be silently forced to device-code login for managed workspaces.

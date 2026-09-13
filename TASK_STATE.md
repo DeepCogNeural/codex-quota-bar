@@ -12,3 +12,10 @@
 
 - Bing site verified via meta tag; sitemap Processing and homepage URL submission success (1 URL). Sites v4 live at source 34ce7bc108ee96596d536cfdb3d9cfdd32bc4e86.
 - Current re-read: Google discovered/not indexed; directory open/no replies; stars 0. Password-save/Touch ID state cannot be inspected due browser security policy.
+
+## School account integration — 2026-09-13
+
+- Completed isolated Chrome SSO enrollment without replacing interactive Codex auth. School credentials stay local and are not included in this repository.
+- Usage endpoint confirmed EDU authentication and 100% remaining in both base windows at enrollment. Native menu selected the added account; backend manual policy matched.
+- Removed two-row truncation from expanded panel. Build/install/signature check passed; installed panel readback displayed all three accounts and the new selection. No model request was sent.
+- Earlier invalid_state was an expired/invalid authorization session; fresh uninterrupted browser flow succeeded. Exact cause of invalidation remains unknown.

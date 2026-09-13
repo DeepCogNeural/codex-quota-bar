@@ -197,7 +197,7 @@ struct QuotaBarControls: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Codex Quota Bar").font(.headline)
-            ForEach(Array(model.ordered.prefix(2))) { account in
+            ForEach(model.ordered) { account in
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
                         Text(model.name(account)).fontWeight(.medium)
