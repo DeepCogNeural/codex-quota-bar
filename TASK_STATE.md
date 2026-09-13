@@ -25,3 +25,5 @@
 - Google and Bing homepage indexing both explicitly confirmed in their URL Inspection tools. Earlier pending-index notes are historical.
 - GitHub 0 stars/0 forks; 14-day traffic 4 views/2 uniques, may include owner. Directory suggestion #245 remains open without replies.
 - Bing meta description length issue: shortened description to 156 characters; deployment pending. Separate outreach task owns new community promotion.
+
+- Description source pushed at 668b6d1. Live deployment blocked: Sites connector returns sites_access_disabled (Sites not enabled for this workspace). Existing live site remains unchanged. Requires restoring access to the original Sites workspace before deployment; do not recreate or migrate silently.

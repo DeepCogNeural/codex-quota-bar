@@ -107,3 +107,5 @@ This is installation assistance and a voluntary acknowledgment, not a mechanism 
 Google URL Inspection explicitly reports URL is on Google and Page is indexed. Bing URL Inspection reports Indexed successfully / URL can appear on Bing. This supersedes the earlier pending-index status, but does not establish high rankings. Google overview: 0 search clicks. GitHub: 0 stars, 0 forks, 4 views and 2 unique visitors in the traffic window (may include the owner). Directory issue 245 is still OPEN without comments.
 
 Bing reports a meta-description length issue and recommends 25–160 characters. The homepage description was shortened to 156 characters; deployment and recrawl status must be tracked separately. Community outreach is being pursued in a separate task; no duplicate submissions from the search task.
+
+Deployment outcome: description source committed and pushed at 668b6d1; NOT live. Sites write credential request returned sites_access_disabled / Sites is not yet enabled for this workspace. No new site was created and no alternate deployment attempted. Existing Google/Bing index confirmations apply to the currently published site.
