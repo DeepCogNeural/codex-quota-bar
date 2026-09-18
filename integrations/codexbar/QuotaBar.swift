@@ -55,7 +55,14 @@ import Observation
         guard let selected = displayWindow(account) else { return account.limitingWindow }
         return account.windows?.first { ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds == selected.seconds }
     }
+    func exhaustedWeeklyWindow(_ account: Account) -> Window? {
+        guard account.auth_valid == true, account.auth_checked == true else { return nil }
+        return account.windows?.first {
+            ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds == 604800 && $0.UsedPercent == 100
+        }
+    }
     func remaining(_ account: Account) -> Double? {
+        if displayWindow(account) == .fiveHours, exhaustedWeeklyWindow(account) != nil { return 0 }
         guard account.auth_valid == true, account.auth_checked == true,
               let value = window(account)?.UsedPercent,
               value.isFinite, (0...100).contains(value) else { return nil }
@@ -222,9 +229,14 @@ struct QuotaBarControls: View {
                                 .allowsHitTesting(false)
                         }
                     }.frame(height: 5)
-                    if model.remaining(account) != nil, let seconds = model.window(account)?.ResetAfterSeconds,
+                    if model.displayWindow(account) == .fiveHours, model.exhaustedWeeklyWindow(account) != nil {
+                        Text(QuotaBar.text("Weekly exhausted · 5h unavailable", "每周额度已耗尽 · 5 小时额度暂不可用"))
+                            .font(.caption2).foregroundStyle(.secondary)
+                    }
+                    if model.remaining(account) != nil,
+                       let seconds = (model.exhaustedWeeklyWindow(account) ?? model.window(account))?.ResetAfterSeconds,
                        seconds.isFinite, seconds >= 0, let fetched = model.fetchedAt {
-                        Text((model.displayWindow(account).map { $0.title + " " } ?? "") + QuotaBar.text("resets ≈ ", "预计重置 ≈ ") + fetched.addingTimeInterval(seconds).formatted(date: .abbreviated, time: .shortened))
+                        Text(((model.exhaustedWeeklyWindow(account) != nil ? QuotaBar.DisplayWindow.weekly : model.displayWindow(account)).map { $0.title + " " } ?? "") + QuotaBar.text("resets ≈ ", "预计重置 ≈ ") + fetched.addingTimeInterval(seconds).formatted(date: .abbreviated, time: .shortened))
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }.padding(.vertical, 4)
@@ -238,9 +250,10 @@ struct QuotaBarControls: View {
             Text(QuotaBar.text("Remaining quota · click a row for 5h / Weekly", "剩余额度 · 点击账号切换 5 小时 / 每周")).font(.caption2).foregroundStyle(.secondary)
             if let error = model.error { Text(error).font(.caption).foregroundStyle(.red) }
             if model.policy != nil {
-                QuotaBarAccountPicker().frame(width: 180, height: 28)
+                QuotaBarAccountPicker().frame(width: width - 24, height: 28, alignment: .leading)
                 Text(QuotaBar.text("New chats only. Existing chats keep their account. Manual chats never fall back to another account.", "仅影响新对话。旧对话保留原账号；手动对话不会自动换账号。"))
                     .font(.caption2).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             } else {
                 Text(QuotaBar.text("Manual control is unavailable", "手动控制暂不可用")).font(.caption).foregroundStyle(.secondary)
             }
@@ -278,12 +291,17 @@ struct QuotaBarAccountPicker: NSViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator() }
     func makeNSView(context: Context) -> NSPopUpButton {
         let button = NSPopUpButton(frame: .zero, pullsDown: false)
+        button.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        button.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         button.controlSize = .regular
         button.font = .systemFont(ofSize: NSFont.systemFontSize)
         button.target = context.coordinator
         button.action = #selector(Coordinator.changed(_:))
         button.setAccessibilityLabel(QuotaBar.text("New chat account", "新对话账号"))
         return button
+    }
+    func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSPopUpButton, context: Context) -> CGSize? {
+        CGSize(width: proposal.width ?? 296, height: proposal.height ?? 28)
     }
     func updateNSView(_ button: NSPopUpButton, context: Context) {
         let model = QuotaBar.shared

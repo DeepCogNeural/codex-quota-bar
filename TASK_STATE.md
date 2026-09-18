@@ -27,3 +27,11 @@
 - Bing meta description length issue: shortened description to 156 characters; deployment pending. Separate outreach task owns new community promotion.
 
 - Description source pushed at 668b6d1. Live deployment blocked: Sites connector returns sites_access_disabled (Sites not enabled for this workspace). Existing live site remains unchanged. Requires restoring access to the original Sites workspace before deployment; do not recreate or migrate silently.
+
+## Quota panel correction — 2026-09-18
+- Draft source: constrain native account selector to content width; allow explanatory text to wrap. Weekly base quota at exactly 100% used overrides 5h availability to zero and identifies weekly exhaustion/reset. Raw upstream windows remain unchanged; absent weekly data is not treated as exhausted.
+- Files: integrations/codexbar/QuotaBar.swift, TASK_STATE.md. Automatic policy unchanged.
+- Build/install/UI acceptance pending current authorization; do not describe installed app as fixed. Next: minimal release build and scoped quota/selector acceptance, then publish accepted change.
+
+- Acceptance completed: release build 115.59s; scoped Swift fixture assertions passed; backup/install/ad-hoc signing and verification passed. AX selector width296 and left edge matched title; dropdown opened and selecting original account succeeded. Actual exhausted weekly account toggled to 5h showed0 plus weekly reason/reset. Restored original Weekly display and manual selection. No model requests/router restart; CUA timeout, used previously authorized AppleScript. Pixel screenshot not obtained.
+- Files also updated: integrations/codexbar/QuotaBarChecks.swift, integrations/README.md. Publishing this accepted slice; Automatic strategy unchanged.

@@ -13,6 +13,16 @@ import Foundation
         for (value, expected) in [(19.0, NSColor.systemRed), (20, .systemYellow), (49, .systemYellow), (50, .systemGreen), (79, .systemGreen), (80, .white), (100, .white)] {
             precondition(QuotaBar.tint(value) == expected)
         }
+        let exhaustedPayload = """
+        [{"email":"empty@example.com","plan_type":"plus","auth_valid":true,"auth_checked":true,"windows":[{"UsedPercent":7,"LimitWindowSeconds":18000,"ResetAfterSeconds":60},{"UsedPercent":100,"LimitWindowSeconds":604800,"ResetAfterSeconds":3600}]}]
+        """
+        let exhausted = try JSONDecoder().decode([QuotaBar.Account].self, from: Data(exhaustedPayload.utf8))[0]
+        model.displayedWindows[exhausted.id] = QuotaBar.DisplayWindow.fiveHours.rawValue
+        precondition(model.remaining(exhausted) == 0)
+        precondition(model.exhaustedWeeklyWindow(exhausted)?.ResetAfterSeconds == 3600)
+        precondition(model.window(exhausted)?.UsedPercent == 7, "Do not change raw 5h quota")
+        precondition(model.remaining(model.accounts[0]) == 90, "Available weekly quota must not clamp 5h")
+        precondition(model.exhaustedWeeklyWindow(model.accounts[0]) == nil)
         let image = model.image()
         precondition(image.size == NSSize(width: 36, height: 18) && !image.isTemplate)
         guard let tiff = image.tiffRepresentation, let bitmap = NSBitmapImageRep(data: tiff),
