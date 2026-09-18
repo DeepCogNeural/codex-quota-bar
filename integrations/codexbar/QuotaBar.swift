@@ -6,6 +6,7 @@ import Observation
 @MainActor @Observable final class QuotaBar {
     static let shared = QuotaBar()
     struct Window: Decodable {
+        let Name: String?
         let UsedPercent: Double
         let LimitWindowSeconds: Double
         let Feature: String?
@@ -25,11 +26,11 @@ import Observation
             return 0
         }
         var limitingWindow: Window? {
-            (windows ?? []).filter { ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds > 0 }
+            (windows ?? []).filter { ($0.Name ?? "") != "request-limit" && ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds > 0 }
                 .max { $0.UsedPercent < $1.UsedPercent }
         }
         var remaining: Double? {
-            let limits = (windows ?? []).filter { ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds > 0 }
+            let limits = (windows ?? []).filter { ($0.Name ?? "") != "request-limit" && ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds > 0 }
             guard auth_valid == true, auth_checked == true, !limits.isEmpty,
                   limits.allSatisfy({ $0.UsedPercent.isFinite && (0...100).contains($0.UsedPercent) }) else { return nil }
             // The most constrained base window determines whether the account has room.
@@ -43,6 +44,7 @@ import Observation
     }
     var displayedWindows: [String: String] = UserDefaults.standard.dictionary(forKey: "quotaBarDisplayWindows") as? [String: String] ?? [:]
     func displayWindow(_ account: Account) -> DisplayWindow? {
+        if account.planRank >= 300 { return .weekly }
         if let raw = displayedWindows[account.id], let selected = DisplayWindow(rawValue: raw) { return selected }
         if account.planRank == 100 { return .fiveHours }
         switch account.limitingWindow?.LimitWindowSeconds {
@@ -53,12 +55,12 @@ import Observation
     }
     func window(_ account: Account) -> Window? {
         guard let selected = displayWindow(account) else { return account.limitingWindow }
-        return account.windows?.first { ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds == selected.seconds }
+        return account.windows?.first { ($0.Name ?? "") != "request-limit" && ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds == selected.seconds }
     }
     func exhaustedWeeklyWindow(_ account: Account) -> Window? {
         guard account.auth_valid == true, account.auth_checked == true else { return nil }
         return account.windows?.first {
-            ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds == 604800 && $0.UsedPercent == 100
+            ($0.Name ?? "") != "request-limit" && ($0.Feature ?? "").isEmpty && $0.LimitWindowSeconds == 604800 && $0.UsedPercent == 100
         }
     }
     func remaining(_ account: Account) -> Double? {
@@ -69,6 +71,7 @@ import Observation
         return 100 - value
     }
     func toggleWindow(_ account: Account) {
+        guard account.planRank < 300 else { return }
         displayedWindows[account.id] = (displayWindow(account) == .weekly ? DisplayWindow.fiveHours : .weekly).rawValue
         UserDefaults.standard.set(displayedWindows, forKey: "quotaBarDisplayWindows")
         onUpdate?()
@@ -229,25 +232,27 @@ struct QuotaBarControls: View {
                                 .allowsHitTesting(false)
                         }
                     }.frame(height: 5)
-                    if model.displayWindow(account) == .fiveHours, model.exhaustedWeeklyWindow(account) != nil {
-                        Text(QuotaBar.text("Weekly exhausted · 5h unavailable", "每周额度已耗尽 · 5 小时额度暂不可用"))
+                    if model.remaining(account) != nil,
+                       let seconds = model.window(account)?.ResetAfterSeconds,
+                       seconds.isFinite, seconds >= 0, let fetched = model.fetchedAt {
+                        Text((model.displayWindow(account).map { $0.title + " " } ?? "") + QuotaBar.text("resets ≈ ", "预计重置 ≈ ") + fetched.addingTimeInterval(seconds).formatted(date: .abbreviated, time: .shortened))
                             .font(.caption2).foregroundStyle(.secondary)
                     }
-                    if model.remaining(account) != nil,
-                       let seconds = (model.exhaustedWeeklyWindow(account) ?? model.window(account))?.ResetAfterSeconds,
-                       seconds.isFinite, seconds >= 0, let fetched = model.fetchedAt {
-                        Text(((model.exhaustedWeeklyWindow(account) != nil ? QuotaBar.DisplayWindow.weekly : model.displayWindow(account)).map { $0.title + " " } ?? "") + QuotaBar.text("resets ≈ ", "预计重置 ≈ ") + fetched.addingTimeInterval(seconds).formatted(date: .abbreviated, time: .shortened))
+                    if model.displayWindow(account) == .fiveHours, model.exhaustedWeeklyWindow(account) != nil {
+                        Text(QuotaBar.text("Weekly exhausted · 5h unavailable", "每周额度已耗尽 · 5 小时额度暂不可用"))
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }.padding(.vertical, 4)
                     .contentShape(Rectangle())
                     .onTapGesture { model.toggleWindow(account) }
-                    .accessibilityAction(named: Text(QuotaBar.text("Switch quota window", "切换额度窗口"))) {
-                        model.toggleWindow(account)
+                    .accessibilityActions {
+                        if account.planRank < 300 {
+                            Button(QuotaBar.text("Switch quota window", "切换额度窗口")) { model.toggleWindow(account) }
+                        }
                     }
-                    .help(QuotaBar.text("Click to switch between 5h and Weekly", "点击切换 5 小时与每周额度"))
+                    .help(account.planRank >= 300 ? QuotaBar.text("Weekly quota", "每周额度") : QuotaBar.text("Click to switch between 5h and Weekly", "点击切换 5 小时与每周额度"))
             }
-            Text(QuotaBar.text("Remaining quota · click a row for 5h / Weekly", "剩余额度 · 点击账号切换 5 小时 / 每周")).font(.caption2).foregroundStyle(.secondary)
+            Text(QuotaBar.text("Remaining quota · Pro: Weekly · other rows: click for 5h / Weekly", "剩余额度 · Pro 固定每周 · 其他账号点击切换")).font(.caption2).foregroundStyle(.secondary)
             if let error = model.error { Text(error).font(.caption).foregroundStyle(.red) }
             if model.policy != nil {
                 QuotaBarAccountPicker().frame(width: width - 24, height: 28, alignment: .leading)
@@ -366,6 +371,7 @@ struct QuotaBarAccountPicker: NSViewRepresentable {
         panel = window
         NSApp.activate(ignoringOtherApps: true)
         window.makeKeyAndOrderFront(nil)
+        Task { await QuotaBar.shared.refresh() }
         if outsideClick == nil {
             outsideClick = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
                 self?.close()

@@ -23,6 +23,22 @@ import Foundation
         precondition(model.window(exhausted)?.UsedPercent == 7, "Do not change raw 5h quota")
         precondition(model.remaining(model.accounts[0]) == 90, "Available weekly quota must not clamp 5h")
         precondition(model.exhaustedWeeklyWindow(model.accounts[0]) == nil)
+        let overlayPayload = """
+        [{"email":"limited@example.com","plan_type":"plus","auth_valid":true,"auth_checked":true,"windows":[{"Name":"request-limit","UsedPercent":100,"LimitWindowSeconds":604800,"ResetAfterSeconds":60},{"Name":"5h","UsedPercent":100,"LimitWindowSeconds":18000,"ResetAfterSeconds":120},{"Name":"weekly","UsedPercent":53,"LimitWindowSeconds":604800,"ResetAfterSeconds":3600}]}]
+        """
+        let limited = try JSONDecoder().decode([QuotaBar.Account].self, from: Data(overlayPayload.utf8))[0]
+        precondition(model.exhaustedWeeklyWindow(limited) == nil)
+        precondition(model.remaining(limited) == 0)
+        precondition(model.window(limited)?.ResetAfterSeconds == 120)
+        model.displayedWindows[limited.id] = QuotaBar.DisplayWindow.weekly.rawValue
+        precondition(model.remaining(limited) == 47)
+        precondition(model.window(limited)?.ResetAfterSeconds == 3600)
+        precondition(model.window(exhausted)?.ResetAfterSeconds == 60)
+        let pro = model.accounts[1]
+        model.displayedWindows[pro.id] = QuotaBar.DisplayWindow.fiveHours.rawValue
+        precondition(model.displayWindow(pro) == .weekly)
+        model.toggleWindow(pro)
+        precondition(model.displayWindow(pro) == .weekly && model.remaining(pro) == 95)
         let image = model.image()
         precondition(image.size == NSSize(width: 36, height: 18) && !image.isTemplate)
         guard let tiff = image.tiffRepresentation, let bitmap = NSBitmapImageRep(data: tiff),
@@ -30,6 +46,6 @@ import Foundation
         try png.write(to: URL(fileURLWithPath: "/tmp/quota-bar-fixture.png"))
         model.accounts = try JSONDecoder().decode([QuotaBar.Account].self, from: Data("[{\"email\":\"unknown@example.com\"}]".utf8))
         precondition(model.accounts[0].remaining == nil)
-        print("PASS: plan order, constrained quota, color boundaries, missing data, rendered menu image")
+        print("PASS: request-limit excluded, real weekly clamp, selected reset, Pro weekly lock, display fixtures")
     }
 }

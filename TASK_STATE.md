@@ -35,3 +35,13 @@
 
 - Acceptance completed: release build 115.59s; scoped Swift fixture assertions passed; backup/install/ad-hoc signing and verification passed. AX selector width296 and left edge matched title; dropdown opened and selecting original account succeeded. Actual exhausted weekly account toggled to 5h showed0 plus weekly reason/reset. Restored original Weekly display and manual selection. No model requests/router restart; CUA timeout, used previously authorized AppleScript. Pixel screenshot not obtained.
 - Files also updated: integrations/codexbar/QuotaBarChecks.swift, integrations/README.md. Publishing this accepted slice; Automatic strategy unchanged.
+
+## Request-limit misclassification — 2026-09-18
+- Root cause found in local router source withRequestTimeExhaustionWindows: synthetic Name=request-limit has UsedPercent100 and LimitWindowSeconds604800 even when limiting window is unspecified. UI ignored Name, mislabeling this overlay as weekly exhaustion.
+- Source fix: decode Name; exclude request-limit from measured base-window selection/remaining/weekly exhaustion. Refresh when opening panel. Genuine weekly exhaustion still clamps 5h. No routing policy change.
+- Modified integrations/codexbar/QuotaBar.swift; build/install and regression fixture pending current test authorization.
+
+- Additional user-requested display rules: Pro always Weekly (including saved5h preferences), no toggle/action; selected5h reset remains first and never substituted with weekly reset. Genuine weekly-exhaustion note follows reset. Draft only, not installed; request-limit fix remains pending same build.
+
+- Completed acceptance: scoped Swift regression executable passed request-limit exclusion, genuine weekly clamp, selected-window reset and Pro saved-preference/toggle checks. Release build passed108.35s (existing upstream deprecated screenshot API warning). Backed up, installed and signature verification passed.
+- Actual installed UI: Pro click stayed Weekly and no quota-switch AX action; Plus toggled Weekly/5h with distinct correct reset captions, restored5h and existing manual selection. A genuinely exhausted weekly account retained its5h reset above explanation. No model request or router restart. Publishing four owned integration/state files.
