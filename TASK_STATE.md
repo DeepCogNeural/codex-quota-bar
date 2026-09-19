@@ -45,3 +45,11 @@
 
 - Completed acceptance: scoped Swift regression executable passed request-limit exclusion, genuine weekly clamp, selected-window reset and Pro saved-preference/toggle checks. Release build passed108.35s (existing upstream deprecated screenshot API warning). Backed up, installed and signature verification passed.
 - Actual installed UI: Pro click stayed Weekly and no quota-switch AX action; Plus toggled Weekly/5h with distinct correct reset captions, restored5h and existing manual selection. A genuinely exhausted weekly account retained its5h reset above explanation. No model request or router restart. Publishing four owned integration/state files.
+
+## Pro-backed Codex model catalog — 2026-09-19
+- Root cause: all client-version model catalog GETs use the synthetic `internal:codex-model-catalog` session. Its sticky assignment selected the EDU account, so the EDU-visible subset became the global Codex model list even though a valid Pro account could expose GPT-6 Astra.
+- Draft source fix: catalog discovery selects a stable, authenticated Codex OAuth account by plan visibility (Pro, Plus, EDU/team/business/enterprise, other). The chosen ID is applied only to the cloned catalog request. No model slug is synthesized, and response-session stickiness, manual new-chat selection and Automatic routing are unchanged.
+- Files: `integrations/subrouter/codex_model_catalog_policy.go`, `integrations/subrouter/codex_model_catalog_policy_test.go`, `integrations/apply.py`, `integrations/README.md`, `TASK_STATE.md`.
+- Completed acceptance: focused catalog tests passed; the Router binary built, was backed up, replaced and restarted. Health and readiness returned `ok`. A real client-version catalog GET returned the upstream `gpt-6-astra` entry, and logs showed `internal:codex-model-catalog` move from EDU to the Pro account. The manual new-chat policy remained `manual` on the same selected account. No test response request was sent.
+- Rollback: `/Users/linghao/.local/share/subrouter-trial/quota-bar-backup/before-pro-catalog-20260919/`.
+- Publishing the five owned integration/state files; no credentials or local account files are included.

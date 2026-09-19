@@ -102,6 +102,18 @@ changes = [
         }
 \t\t// A caller-supplied account selector is a strict per-request binding, not
 '''),
+    (sr / 'proxy.go',
+     '''\t\tif modelCatalogRequest && boundLease == nil {
+\t\t\troutingRequest = codexModelCatalogRoutingRequest(r)
+\t\t}
+''',
+     '''\t\tif modelCatalogRequest && boundLease == nil {
+\t\t\troutingRequest = codexModelCatalogRoutingRequest(r)
+\t\t\tif catalogAccountID := s.codexModelCatalogAccountID(r.Context()); catalogAccountID != "" {
+\t\t\t\troutingRequest.Header.Set("X-Subrouter-Account-ID", catalogAccountID)
+\t\t\t}
+\t\t}
+'''),
 ]
 # Check all insertion points before writing anything. Already-applied patches are skipped.
 pending = {}
@@ -123,4 +135,6 @@ for path, text in pending.items():
     path.write_text(text)
 shutil.copyfile(base / 'codexbar/QuotaBar.swift', cb / 'QuotaBar.swift')
 shutil.copyfile(base / 'subrouter/quota_bar_policy.go', sr / 'quota_bar_policy.go')
+shutil.copyfile(base / 'subrouter/codex_model_catalog_policy.go', sr / 'codex_model_catalog_policy.go')
+shutil.copyfile(base / 'subrouter/codex_model_catalog_policy_test.go', sr / 'codex_model_catalog_policy_test.go')
 print('Native integration source applied. Build and deployment are separate steps.')
