@@ -1,5 +1,9 @@
 # Working on this repository
 
+## Response Style
+
+本机回复遵守 `~/.claude/docs/response-style.md`（未加载时读取）；不要复制正文。外部环境无此文件时遵守用户当次要求，不假称已加载。
+
 This repository contains a local CodexBar provider plugin and an optional native menu/control integration with Subrouter.
 
 - Read README.md and docs/architecture.md before changing integration behavior.
